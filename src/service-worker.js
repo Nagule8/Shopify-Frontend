@@ -76,33 +76,50 @@ self.addEventListener("fetch", (e) => {
 });
 
 self.addEventListener("sync", (event) => {
-  if(event.tag == "offline-category"){
-    console.log("Sync registered.")
-    event.waitUntil(addCategory());
+  if(event.tag){
+    console.log("Sync registered.",event.tag)
+    //event.waitUntil(setTimeout(add("category","postCategory"),3000));
+    //event.waitUntil(setTimeout(add("product","postProduct"),3000));
+    event.waitUntil(indexedDB.databases()
+    .then(res =>{
+      res.map(database=>{
+        if(database.name != "workbox-expiration"){
+          add(database.name,"post" + database.name);
+        }
+        
+      })
+    }))
   }
   
-  async function addCategory(){
+  function add(idbName,dbName){
     
-    let openRequest =await indexedDB.open("category",10);
-    console.log(await openRequest.result);
+    let openRequest = indexedDB.open(idbName,10);
+
     openRequest.onsuccess = function(event){
-      db = openRequest.result;
+      let db = openRequest.result;
       console.log("DB: ",event.target.result);
 
-      db.transaction(["postCategory"],"readwrite").objectStore("postCategory").openCursor().onsuccess = function(event){
-        cursor = event.target.result;
+      db.transaction([dbName],"readwrite").objectStore(dbName).openCursor().onsuccess = function(event){
+        let cursor = event.target.result;
 
         if(cursor){
           console.log("Cursor: ",cursor.value.name, cursor.key);
-          sendCategory(cursor.value, cursor.key);
+          cursor.continue();
+          sendCategory(idbName,dbName,cursor.value, cursor.key);
         }
       }
     };
     
   }
 
-  function sendCategory(data, index){
-    fetch("https://localhost:44385/api/categories",{
+  function sendCategory(idbName,dbName, data, index){
+    let fCategory = "/categories";
+    let fProduct  = "/items";
+    let apiName;
+    if(idbName == "Category"){ apiName = fCategory }
+    else{ apiName = fProduct }
+
+    fetch("https://localhost:44385/api" + apiName,{
       method: 'POST',
       headers: {
         "Content-type": "application/json"
@@ -111,18 +128,21 @@ self.addEventListener("sync", (event) => {
       credentials: 'include'
     }).then((response)=>{
       console.log(response);
-      deleteIDB(index);
+      deleteIDB(index, idbName,dbName);
     })
   }
 
-  function deleteIDB(index){
-    var indexedDBOpenRequest = indexedDB.open('category',  10)
+  function deleteIDB(index, idbName,dbName){
+    var indexedDBOpenRequest;
+
+    indexedDBOpenRequest = indexedDB.open(idbName,  10) 
+
     indexedDBOpenRequest.onsuccess = function () {
     let db = this.result
-    let transaction = db.transaction("postCategory", "readwrite");
-    let storeObj = transaction.objectStore("postCategory");
+    let transaction = db.transaction(dbName, "readwrite");
+    let storeObj = transaction.objectStore(dbName);
     storeObj.delete(index)
-    console.log("Deleted.");
+    console.log("Data in the postCategory Deleted.");
   }
   }
 });

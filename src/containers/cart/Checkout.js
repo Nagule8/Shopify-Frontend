@@ -11,7 +11,7 @@ const Checkout = () => {
         </div>
         <form>
             <div className="form-row">
-                
+
 
             </div>
         </form>

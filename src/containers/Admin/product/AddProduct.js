@@ -1,72 +1,18 @@
-import React,{useState} from 'react';
-import { useSelector, useDispatch } from "react-redux";
-import {Button, Row, Col, Form, Image} from "react-bootstrap";
+import React from 'react';
+import { useSelector } from "react-redux";
+import {Button, Row, Col, Form} from "react-bootstrap";
 
-import {createProduct} from "../../../redux/actions/productActions";
-import ProductDataService from "../../../services/product.service";
-import ImageUploadService from '../../../services/imageUploadService.service';
+import HandleProductSubmit from '../handleSubmit/handleProductSubmit';
 
 const AddProduct = ({isShowing, hide}) => {
-    const product = useSelector((state)=>state.createProduct);
     const categories = useSelector((state)=> state.allCategories.categories);
-
-    var [imagename, setimagename] = useState("noimage.png");
-    const dispatch = useDispatch();
-
-    let imagesrc = "https://localhost:44385/Photos/" + imagename;
-
-    const handleSubmit=async (e)=>{
-        e.preventDefault();
-
-        const name = e.target.Name.value;
-        const description = e.target.Description.value;
-        const price = e.target.Price.value;
-        const categoryid = e.target.CategoryId.value;
-
-        const data = {
-            name,
-            description,
-            price,
-            categoryid,
-            imagename,
-            
-        };
-
-        
-
-        console.log("phot:",imagename);
-        const res = await ProductDataService.create(data).catch((err) => {
-            console.log("Error: ",err);
-        });
-        
-        console.log(res);
-        console.log(res.data);
-
-        dispatch(createProduct(res.data));
-    }
-    console.log(product);
-
-    const handleFileSelected=async (event)=>{
-        event.preventDefault();
-
-        setimagename(event.target.files[0].name);
-        const formData = new FormData();
-        formData.append(
-            "images",
-            event.target.files[0],
-            event.target.files[0].name
-        );
-
-        console.log("image name:",imagename);
-
-        await ImageUploadService.create(formData);
-    }
+    const {addProduct, uploadImage } = HandleProductSubmit();
 
     return (
         isShowing ? <div className="container">
                 <Row>
                 <Col sm={6}>
-                    <Form onSubmit={handleSubmit}>
+                    <Form onSubmit={addProduct}>
                                     
                         <Form.Group controlId="Name">
                             <Form.Label>Name</Form.Label>
@@ -103,8 +49,7 @@ const AddProduct = ({isShowing, hide}) => {
                 </Col>
 
                 <Col sm={6}>
-                    <Image height="200px" width="200px" src={imagesrc}/>
-                    <input onChange={handleFileSelected} type="File" />
+                    <input onChange={uploadImage} type="File" />
                 </Col>
                 </Row>
 

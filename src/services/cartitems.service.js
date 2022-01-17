@@ -8,16 +8,15 @@ class CartDataService{
         return http.get(`/cartitems/${id}`);
     }
     create(data) {
-        return http.post("/cartitems", 
-        data);
+        return http.post("/cartitems", data, { withCredentials: true });
     }
     
-    update(id, data) {
-    return http.put(`/cartitems/increase/${id}?quantity=${data}`);
+    update(id, quantity) {
+        return http.put(`/cartitems/Increase/${id}?quantity=${quantity}`, { withCredentials: true });
     }
 
     delete(id) {
-    return http.delete(`/cartitems/${id}`);
+        return http.delete(`/cartitems/${id}`, { withCredentials: true });
     }
 }
 

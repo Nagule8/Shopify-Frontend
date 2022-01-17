@@ -12,11 +12,11 @@ class CategoryDataService{
     }
     
     update(id, data) {
-    return http.put(`/categories/${id}`, data);
+    return http.put(`/categories/${id}`, data,{ withCredentials: true });
     }
 
     delete(id) {
-    return http.delete(`/categories/${id}`);
+    return http.delete(`/categories/${id}`, { withCredentials: true });
     }
 }
 

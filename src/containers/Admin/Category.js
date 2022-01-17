@@ -1,32 +1,36 @@
-import React,{useEffect} from "react";
-import { useSelector } from "react-redux";
-
+import React,{useEffect, useState} from "react";
+import {useDispatch, useSelector } from "react-redux";
 import {Table} from "react-bootstrap";
 import { ButtonToolbar,Button} from "react-bootstrap";
 
+import Toastify from "../ToastNotification/Toastify";
 import AddToggle from "./toggle/AddToggle";
+import EditToggle from "./toggle/EditToggle";
 import AddCategory from "./category/AddCategory";
 import EditCategory from "./category/EditCategory";
-import EditToggle from "./toggle/EditToggle";
-
 import FetchCategory from "../../fetchData/FetchCategory";
 
 const Category =()=>{
     const categories = useSelector((state)=> state.allCategories.categories);
     const {fetchCategories, deleteItem} = FetchCategory();
-
     const {isShowing, toggle} = AddToggle();
     const {editShow, editToggle} = EditToggle();
-    
+
+    const [SpecificCategory, setSpecificCategory] = useState("");
+
     useEffect(()=>{
         fetchCategories();
     },[]);
 
-    console.log(categories);
-    console.log("editShoe:",editShow);
+    const showFun = (item)=>{
+        setSpecificCategory(item);
+        editToggle();
+    }
 
     return(
+        
         <div>
+            
                 <Table className="mt-4" striped bordered hover size="sm" >
                     <thead>
                         <tr>
@@ -37,22 +41,27 @@ const Category =()=>{
                     </thead>
                     <tbody>
                         {categories.map(item=>
+                            
                             <tr key={item.id}>
                                 <td>{item.name}</td>
                                 <td>{item.slug}</td>
                                 <td>{item.sorting}</td>
                                 <td>
-                                    <ButtonToolbar>
+                                <ButtonToolbar>
                                         <Button className="mr-2" variant="info"
-                                        onClick={editToggle}>
+                                        onClick={()=>{showFun(item)}}>
                                             Edit
                                         </Button>
                                         <Button className="mr-2" variant="danger"
-                                        onClick={()=>deleteItem(item.id)} >
+                                        onClick={()=>{
+                                            //notifyWarning(item.name + "Deleted.");
+                                            deleteItem(item);
+                                            }} >
                                             Delete
                                         </Button>
                                     </ButtonToolbar>
                                 </td>
+                                
                             </tr>)}
                     </tbody>
 
@@ -63,14 +72,16 @@ const Category =()=>{
                         Close
                     </Button> :
                     <Button className="mr-2" variant="info" 
-                    onClick={toggle}>
+                    onClick={()=>{
+                        toggle();
+                    }}>
                         Add Category
                     </Button>
                 }
                 
                 <AddCategory isShowing= {isShowing} />
-                <EditCategory  editShow={editShow} />
-
+                <EditCategory editShow={editShow} item={SpecificCategory} />
+                
             </div>
     );
 };

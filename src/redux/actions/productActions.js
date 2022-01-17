@@ -1,4 +1,12 @@
-import { ActionTypes } from "../constants/action-types";
+import { ActionTypes } from "../constants/productAction-Types";
+
+export const createProduct = (product) =>{
+    return{
+        type: ActionTypes.CREATE_PRODUCT,
+        payload: product,
+
+    };
+};
 
 export const setProducts = (products) =>{
     return{
@@ -16,13 +24,12 @@ export const selectedProduct = (product) =>{
     };
 };
 
-export const createProduct = (product) =>{
+export const editProduct = (product) =>{
     return{
-        type: ActionTypes.CREATE_PRODUCT,
+        type: ActionTypes.EDIT_PRODUCT,
         payload: product,
-
     };
-};
+} ;
 
 export const deleteProduct = (id)=>{
     return{
@@ -37,33 +44,23 @@ export const removeSelectedProduct = () =>{
     };
 };
 
-export const setCategories = (categories) =>{
+export const filteredProducts = (categoryId) => {
     return{
-        type: ActionTypes.SET_CATEGORIES,
-        payload: categories,
-
-    };
-};
-
-export const createCategory = (category) =>{
-    return{
-        type: ActionTypes.CREATE_CATEGORY,
-        payload: category,
-
-    };
-};
-
-export const deleteCategory = (id)=>{
-    return{
-        type: ActionTypes.DELETE_CATEGORY,
-        payload: id,
+        type: ActionTypes.FILTER_PRODUCTS,
+        payload:  categoryId
     }
 }
 
-export const setCarts = (carts) =>{
+export const sortedProducts = (sortValue, products) => {
     return{
-        type: ActionTypes.SET_CARTS,
-        payload: carts,
+        type: sortValue,
+        products: products
+    }
+}
 
-    };
-};
+export const searchedProducts = (searchValue) => {
+    return{
+        type: ActionTypes.SEARCH_PRODUCTS,
+        payload: searchValue
+    }
+}

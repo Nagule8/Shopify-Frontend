@@ -1,18 +1,26 @@
 import {combineReducers} from "redux";
-import { productReducer,selectedProductReducer,categoryReducer,
-        cartReducer,createProductReducer,createCategoryReducer,
-        deleteProductReducer } from "./productReducer";
+
+import { ProductReducer, selectedProductReducer } from "./productReducer";
 import { userReducer } from "./userReducer";
+import { CategoryReducer,selectedCategoryReducer } from "./categoryReducer";
+import { CartReducer } from "./cartReducer";
+import { ImageReducer } from "./imageReducer";
+import {toastsReducer} from "./toastReducer";
 
 const reducers =combineReducers({
-    allProducts:productReducer,
+    allProducts:ProductReducer,
     product:selectedProductReducer,
-    createProduct:createProductReducer,
-    deleteProduct:deleteProductReducer,
-    allCategories:categoryReducer,
-    createCategory:createCategoryReducer,
-    allCarts:cartReducer,
+
+    allCategories:CategoryReducer,
+    category:selectedCategoryReducer,
+
+    allCarts:CartReducer,
+    
     user:userReducer,
+
+    images:ImageReducer,
+
+    toasts:toastsReducer
 });
 
 export default reducers;

@@ -1,18 +1,11 @@
 import React,{useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
-
-import RegisterUserDataService from '../../services/registeruser.service';
+import Login_Logout from './handleSubmit/Login_Logout';
 
 const Logout = () => {
     let histroy = useHistory();
-
-    const logout = async ()=>{
-        const res = await RegisterUserDataService.logout().catch((err)=>{
-            console.log("Logout Error:",err);
-        })
-
-        console.log(res.data);
-    }
+    const {logout} = Login_Logout();
+    
 
 
     useEffect(()=>{

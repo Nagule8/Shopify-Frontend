@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import {Form, Button} from "react-bootstrap";
 import { Redirect, useHistory } from 'react-router-dom';
 
-import "./Login.css";
+import "../../Style/Login.css";
 import RegisterUserDataService from '../../services/registeruser.service';
 import { createUser } from '../../redux/actions/userActions';
 

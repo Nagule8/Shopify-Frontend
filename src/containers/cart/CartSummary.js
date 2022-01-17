@@ -16,10 +16,11 @@ const CartSummary = () => {
         var tot = 0;  
         {carts.map(item=>
             {
-                tot = tot + item.Total;
+                tot = tot + item.total;
             }
-            
-        )};
+        )
+        console.log(carts);
+    };
         setTotalCartValue(tot);
         setchangeButton(tot);
             
@@ -28,7 +29,7 @@ const CartSummary = () => {
     return (
         <div>
             <h1>Cart summary!</h1>
-            <h1>Total:{TotalCartValue}</h1>
+            <h1>Total:${TotalCartValue}</h1>
 
             <ButtonToolbar>
                 {changeButton ? <Nav>

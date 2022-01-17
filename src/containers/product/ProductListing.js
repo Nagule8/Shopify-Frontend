@@ -1,32 +1,26 @@
-import React,{useEffect} from "react";
-import { useDispatch } from "react-redux";
+import React,{useState ,useEffect} from "react";
+
 import ProductComponent from "./ProductComponent";
-
-import {setProducts} from "../../redux/actions/productActions";
-import  ProductDataService from "../../services/product.service";
-
 import FetchUser from "../../fetchData/FetchUser";
+import FetchProduct from "../../fetchData/FetchProduct";
+import FetchCategory from "../../fetchData/FetchCategory";
+import Filter from "../Filter/Filter";
 
-const ProductListing =()=>{
-    const dispatch = useDispatch();
+
+const ProductListing =()=>{    
     const {fetchUser} = FetchUser();  
-
-    const fetchProducts = async ()=>{
-        const response = await ProductDataService.getAll()
-        .catch((err) => {
-            console.log("Error: ",err);
-        });
-        dispatch(setProducts(response.data));
-    };
+    const {fetchProducts} = FetchProduct();
+    const {fetchCategories} = FetchCategory();
 
     useEffect(()=>{
         fetchProducts();
+        fetchCategories();
         fetchUser();
     },[]);
 
     return(
-
         <div className="ui grid container">
+            <Filter />
             <ProductComponent />
         </div>
     );

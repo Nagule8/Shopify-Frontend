@@ -1,5 +1,5 @@
 import React,{useEffect} from "react";
-import Header from './containers/header/Header';
+import Navbar from './containers/header/';
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 import Product from "./containers/Admin/Product";
@@ -15,6 +15,7 @@ import Checkout from "./containers/cart/Checkout";
 
 import FetchUser from "./fetchData/FetchUser";
 
+//import "./containers/StyleSheets/App.css";
 function App() {
   const name = window.localStorage.getItem("Name");
   const {fetchUserId,fetchUser} = FetchUser();
@@ -27,7 +28,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Header />
+        <Navbar />
         <Switch>
           <Route path="/" component={ProductListing} exact />
           <Route path="/product/:productId" component={ProductDetails} />

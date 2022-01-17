@@ -1,39 +1,62 @@
 import { useDispatch } from "react-redux";
 import CartDataService from "../services/cartitems.service";
-import {setCarts} from "../redux/actions/productActions";
+import {setCartItems, deleteCartItems} from "../redux/actions/cartActions";
+import Toastify from "../containers/ToastNotification/Toastify";
 
 const FetchCart = () => {
     const dispatch = useDispatch();
+    const {notifySuccess, notifyError, notifyWarning} = Toastify();
 
     const fetchCarts = async (userid)=>{
-        const res = await CartDataService.getAll(userid)
-            .catch((err) => {
-                console.log("Error: ",err);
-            });
-            dispatch(setCarts(res.data));
+        await CartDataService.getAll(userid)
+        .then((response)=>{
+            dispatch(setCartItems(response.data));
+        })
+        .catch((err) => {
+            notifyError(err);
+        });
+            
     };
 
     const IncQuantity = async (id,quantity) => {
         await CartDataService.update(id,quantity)
+        .then(()=>{
+            notifySuccess("Quantity Increased.");
+        })
         .catch((err)=>{
-            console.log("Error:",err);
+            notifyError(err);
         });
 
         console.log(id,quantity);
-
     };
 
-    const deleteCartItem = async (id) =>{
-        await CartDataService.delete(id)
+    const deleteCartItem = async (cartItem) =>{
+        if(window.confirm("Are you sure?")){
+            await CartDataService.delete(cartItem.id)
+            .then((res)=>{
+                notifyWarning(`${cartItem.itemName} deleted.`);
+                dispatch(deleteCartItems(cartItem));
+            })
+            .catch((err)=>{
+                notifyError(err);
+            });
+        }
+    }
+
+    const addToCart = async (data)=>{
+
+        const res = await CartDataService.create(data)
+        .then((res)=>{
+            notifySuccess("Product added.");
+        })
         .catch((err)=>{
-            console.log("error:",err);
+            notifyError(err);
         });
-        console.log(`cart item ${id}, Deleted.`);
     }
 
     return {
         fetchCarts, IncQuantity,
-        deleteCartItem
+        deleteCartItem, addToCart
     }
 }
 

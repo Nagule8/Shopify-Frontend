@@ -47,7 +47,7 @@ const Cart =()=>{
                                     <ButtonToolbar>
                                         <Button className="mr-2" variant="danger" 
                                         onClick={()=>{
-                                            deleteCartItem(item.id);
+                                            deleteCartItem(item);
                                         }} >
                                             Delete
                                         </Button>

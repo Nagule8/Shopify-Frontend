@@ -1,62 +1,89 @@
-import React from "react";
-import {NavLink} from "react-router-dom";
-import { Container,FormControl, Navbar, Nav } from "react-bootstrap";
-import { useSelector } from 'react-redux';
+import styled from "styled-components";
+import { NavLink as Link } from "react-router-dom";
+import {FaBars} from "react-icons/fa";
 
-import "./Header.css";
-import {FaShoppingCart} from "react-icons/fa";
+export const Nav = styled.nav`
+    background: #000;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem calc((100vw-1000px)/2);
+    z-index: 10;
+`;
 
-const Header = ()=>{
-    const user = useSelector(state => state.user);
-    const username = window.localStorage.getItem("Name");
+export const NavLink = styled(Link)`
+    color: #fff;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 0 1rem;
+    height: 100%;
+    cursor: pointer; 
+    &.active{
+        color: #15cdfc;
 
-    return (    
-        <Navbar bg="dark" variant="dark"  expand="lg">
-                
-            <Container>
-                <Navbar.Brand>
-                    <a href="/">Shopify</a>
-                </Navbar.Brand>
-                <Navbar.Text className="search">
-                    <FormControl style={{width:500}} placeholder="Search a product" className="m-auto" />
-                </Navbar.Text>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav>                        
-                        <a className="d-inline p-2 bg-dark text-white" href="/">
-                            Home
-                        </a>
-                        {username === "Admin" ? <div className="d-inline p-2 bg-dark text-white">
-                            <NavLink className="d-inline p-2 bg-dark text-white" to="/Category">
-                                Category
-                            </NavLink> 
-                            <NavLink className="d-inline p-2 bg-dark text-white" to="/Product">
-                                Product
-                            </NavLink> </div> : null
-                        }
-                        <NavLink className="d-inline p-2 bg-dark text-white" to="/Cart">
-                            <FaShoppingCart color="white" fontSize="25px" /> 
-                        </NavLink>
+    }   
+`;
+export const Bars = styled(FaBars)`
+    display: none;
+    color: #fff;
 
-                        <div className="d-inline p-2 bg-dark text-white">
-                            {user.Name ?
-                            <NavLink to="/Logout">Logout</NavLink> :
-                            <NavLink to="/SignUp">
-                                SignUp  
-                            </NavLink>                      
+    @media screen and (max-width:768px){
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(-100%, 75%);
+        font-size: 1.8rem;
+        cursor: pointer;
+    }
+`;
 
-                        }</div>
-                        <div className="d-inline p-1 bg-dark text-white" >
-                            {user.Name ?
-                                (<h3>Welcome, {(username)} !</h3>) :
-                                <div>Anonymous user</div>
-                            }                            
-                        </div>                           
-                    </Nav>
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
-    )
-}
+export const NavMenu = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: -24px;
+  /* Second Nav */
+  /* margin-right: 24px; */
+  /* Third Nav */
+  /* width: 100vw;
+  white-space: nowrap; */
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+`;
 
-export default Header;
+export const NavBtn = styled.nav`
+  display: flex;
+  align-items: center;
+  margin-right: 24px;
+  /* Third Nav */
+  /* justify-content: flex-end;
+  width: 100vw; */
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+`;
+
+export const NavBtnLink = styled(Link)`
+  border-radius: 4px;
+  background: #256ce1;
+  padding: 10px 22px;
+  color: #fff;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  /* Second Nav */
+  margin-left: 24px;
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    background: #fff;
+    color: #010606;
+  }
+`;
+
+export const h5 = styled.h5`
+    color: aliceblue;
+`
